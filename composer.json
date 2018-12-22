@@ -1,0 +1,15 @@
+{
+    "require": {
+        "slim/slim": "^3.0",
+        "catfan/medoo": "^1.6"
+    },
+
+    "autoload": {
+        "files" : ["./lib/common.php", "./lib/sysvar.php"],
+        "psr-4" : {
+            "Core\\"   : "Core",
+            "Error\\"  : "Error"
+        }
+    }
+
+}

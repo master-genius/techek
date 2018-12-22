@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>疯狂的机械键盘</title>
+    <link rel="stylesheet" href="/static/css/fdxy.min.css">
+    <link rel="stylesheet" href="/static/css/master.css">
+    <link rel="stylesheet" href="/static/hljs/styles/default.css">
+    <script src="/static/js/raj.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/mithril.min.js"></script>
+    
+    <script src="/static/techgeek/js/component.js"></script>
+    <script src="/static/techgeek/js/wstorage.js"></script>
+    <!-- <script src="/static/js/simplemde.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/hljs/highlight.pack.js"></script>
+    <script>
+        hljs.configure({
+            tabReplace: '    ',
+            //classPrefix: ''
+        });
+
+        //hljs.initHighlighting();
+    </script>
+
+    <style>
+
+        .head-menu{
+            z-index : 2;
+            position: fixed;
+            top:0;
+            background-color: #ffffff;
+            border-bottom: solid 0.05rem #450023;
+            line-height: 2.55rem;
+            min-height: 2.55rem;
+            width:100%;
+            text-align: center;
+        }
+
+        .head-menu a {
+            color : #4a4a6f;
+        }
+        .head-menu-space {
+            margin-top:2.9rem;
+        }
+
+        #sys-common-bar {
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            /* overflow-x: hidden;  */
+            color:#4a4a4a;
+            margin-left: .2rem;
+        }
+
+        .start-func-btn {
+            color:#4a4a4a;
+            margin-left:.3rem;
+        }
+
+        #main-menu a {
+            color : #4a4a4a;
+            font-size : 101%;
+        }
+
+        body {
+            font-family: sans-serif, "Courier New", "Helvetica Neue",Helvetica,Roboto,Arial;
+        };
+    </style>
+</head>
+
+<body>
+    <div id="sys-info"></div>
+    <div id="alert-block"></div>
+    <div class="head-menu">
+        <div class="grid-x">
+            <div class="cell small-3 medium-3 large-3" id="start-btn">
+                
+            </div>
+            <div class="cell small-9 medium-9 large-9">
+                <span id="sys-common-bar">
+                </span>
+            </div>
+            
+        </div>
+        
+        <div id="start-win" class="hide-start-window" style="border: solid 0.05rem #e5e5e5;">
+            <div class="grid-container">
+                <div class="grid-x">
+                    <div class="cell small-12">
+                        <div class="grid-x" id="main-menu" style="line-height: 2.8rem;">  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="head-menu-space"></div>
+
+    <div class="full-container" id="main-container">
+
+    </div>
+    <div class="grid-container">
+        <div class="grid-x">
+            <div class="cell small-12">
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('#start-win').addEventListener('click', function(e){
+            //console.log(e);
+            var em = document.createEvent('MouseEvent');
+            em.initEvent('click', true, true);
+            document.querySelector('#start-a-btn').dispatchEvent(em);
+        });
+        function set_group_list(id) {
+            //wo.set('list-group', id);
+            m.route.set('/list/:group', {group : id});
+        }
+
+        function ClearListSearch() {
+            var knode = document.querySelector('#keywords');
+            knode.value = '';
+            wo.set('list-kwd', '');
+            wo.set('list-page', 1);
+            ApiGetList();
+        }
+
+        function ListSearch() {
+            var knode = document.querySelector('#keywords');
+            var kwd = knode.value.trim();
+            wo.set('list-kwd', kwd);
+            wo.set('list-page', 1);
+            ApiGetList();
+        }
+
+        function ApiGetList() {
+            var page = wo.get('list-page');
+            var kwd = wo.get('list-kwd');
+            var group = wo.get('list-group');
+
+            var args = '?page=' + page;
+            if (kwd !== null && kwd.length > 0) {
+                args += `&kwd=${encodeURIComponent(kwd)}`;
+            }
+
+            if (group !== null && !isNaN(group) && parseInt(group) >= 0) {
+                args += `&group=${group}`;
+            }
+
+            raj.get({
+                url : `${_sysvar.apihost}/u/rs/list${args}`,
+                success : function (xr) {
+                    if (xr.total_page > 0) {
+                        ComSetPageInfo(xr.cur_page, xr.total_page);
+                    }
+
+                    if (xr.status == 0) {
+                        var html = '';
+                        for (var i=0; i<xr.rs_list.length;i++) {
+                            html += `
+                                <div class="grid-x" style="margin-top:1.5rem;margin-bottom:1.2rem;">
+                                    <div class="cell small-12">
+                                        <a href="#!/resource/${xr.rs_list[i].id}" style="color:#4a4a4a;">
+                                            <h5>${xr.rs_list[i].rs_title}</h5>
+                                            <span style="font-size:86%;color:#cecece;">
+                                                ${xr.rs_list[i].description}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        document.querySelector('#resource-list').innerHTML = html;
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script>
+
+        var sysbar = document.querySelector('#sys-common-bar');
+
+        m.render(document.querySelector('#start-btn'), m(
+            'a', {
+                id : 'start-a-btn',
+                onclick : function(e) {
+                    var t = document.querySelector('#start-win');
+                    if (t) {
+                        if (t.className === 'hide-start-window') {
+                            t.className = '';
+                            document.querySelector('#start-a-btn').innerHTML = 'X';
+                        } else {
+                            t.className = 'hide-start-window';
+                            document.querySelector('#start-a-btn').innerHTML = '|||';
+                        }
+                    }
+                },
+                class : 'start-func-btn'
+            },
+            '|||'
+        ));
+        
+        var main = document.querySelector('#main-container');
+        var mainMenu = document.querySelector('#main-menu');
+        
+        m.render(mainMenu, [
+                    m(
+                        'div', {
+                            class : 'cell small-12 medium-6 large-4',
+                        }, 
+                        m('a[href=/]', {
+                            oncreate : m.route.link,
+                            onclick : function() {
+                                m.route.set('/');
+                            }
+                        }, '首页')
+                    ),
+
+                    m(
+                        'div', {
+                            class : 'cell small-12 medium-6 large-4',
+                        }, 
+                        m('a[href=/list]', {
+                            oncreate : m.route.link,
+                            onclick : function() {
+                                m.route.set('/list');
+                            }
+                        }, '列表')
+                    )
+                ]);
+
+
+        var Home = {
+            oncreate : function(vnode) {
+                m.render(sysbar, m('span', '首页'));
+                raj.get({
+                    url : _sysvar.apihost + '/u/rs/group/list',
+                    success : function(xr) {
+                        if (xr.status == 0) {
+                            var html = '<div class="grid-x">';
+                            for (var i=0; i<xr.group_list.length; i++) {
+                                html += `
+                                    <div class="cell small-6 medium-4 large-3" style="padding:0.5rem;line-height:3.5rem;text-align:center;">
+                                        <a href="javascript:set_group_list(${xr.group_list[i].id});" style="color:#4a4a4a;">
+                                            ${xr.group_list[i].group_name}
+                                        </a>
+                                    </div>
+                                `;
+                            }
+                            html += '</div>';
+                            var hc = document.querySelector('#home-content');
+                            if (hc) {
+                                hc.innerHTML = html;
+                            }
+                        }
+                    }
+                });
+            },
+            view : function() {
+                return m('div', {
+                        class : 'grid-x'
+                    },[
+                        m('div', {
+                            class : 'cell medium-2 large-3'
+                        }, ''),
+                        m('div', {
+                            class : 'cell small-12 medium-8 large-6',
+                            id : 'home-content',
+                            style : 'padding-left: 0.08rem;padding-right: 0.08rem;'
+                        }, ''),
+
+                        m('div', {
+                            class : 'cell medium-2 large-3'
+                        }, ''),
+                    ]
+                );
+            }
+        };
+
+        var List = {
+            oninit : function(vnode) {
+                if (vnode.attrs.group !== undefined) {
+                    wo.set('list-group', vnode.attrs.group);
+                    wo.set('list-page', 1);
+                } else {
+                    wo.remove('list-group');
+                }
+            },
+            onupdate : function(vnode) {
+                if (vnode.attrs.group !== undefined) {
+                    wo.set('list-group', vnode.attrs.group);
+                    ApiGetList();
+                } else {
+                    wo.remove('list-group');
+                    ApiGetList();
+                }
+            },
+            oncreate : function(vnode) {
+                m.render(sysbar, m('span', {
+                    onclick : function() {
+                        m.route.set('/');
+                    }
+                }, '返回'));
+
+                ListPageTemp('#search-block');
+                if (wo.get('list-kwd')) {
+                    document.querySelector('#keywords').value = wo.get('list-kwd');
+                }
+
+                var fp = document.querySelector('#footer-block');
+                if (!fp) {
+                    return false;
+                }
+
+                fp.innerHTML = PageTemp();
+                
+                ComPageEvent((page) => {
+                    wo.set('list-page', page);
+                    ApiGetList();
+                });
+
+                if (wo.get('list-page') === null) {
+                    wo.set('list-page', 1);
+                }
+                ApiGetList();
+                
+            },
+            view : function() {
+                return m('div', {
+                    class : 'grid-x'
+                }, [
+                    m('div', {class : 'cell medium-2 large-3'}, ''),
+                    
+                    m('div', {
+                        class : 'cell small-12 medium-8 large-6',
+                        style : 'padding-left: 0.08rem; padding-right: 0.08rem;'
+                    }, [
+                        m('div', {id : 'search-block'},''),
+                        m('div', {id : 'resource-list'},''),
+                        m('div', {
+                            style : 'min-height:2.7rem;'
+                        }, ''),
+                        m('div', {                            
+                            //id : 'footer-block',
+                            style : 'z-index:2;position:fixed;width:100%;left:0%;bottom:0;background-color:#ffffff;'
+                        },[
+                            m('div', {
+                                class : 'grid-x'
+                            },[
+                                m('div', {class : 'cell medium-2 large-3'}, ''),
+                                m('div', {
+                                    class : 'cell small-12 medium-8 large-6',
+                                    id : 'footer-block',
+                                    style : 'background-color:#f2f2f8;'
+                                }, ''),
+                                m('div', {class : 'cell medium-2 large-3'}, ''),
+                            ])
+                        ]),
+                    ]),
+
+                    m('div', {class : 'cell medium-2 large-3'}, '')
+                ]);
+                
+            }
+        };
+
+        var Resource = {
+
+            oncreate : function(vnode) {
+                m.render(sysbar, m('span', '内容'));
+                var id = vnode.attrs.rsid;
+                raj.get({
+                    url : _sysvar.apihost + '/u/rs/get/'+id,
+                    success : function(xr) {
+                        if (xr.status == 0) {
+                            //m.render(sysbar, m('span', `${xr.resource.rs_title}`));
+                            m.render(sysbar, m('span', {
+                                onclick : function(){
+                                    history.back();
+                                }
+                            },'返回'));
+
+                            var r = document.querySelector('#resource-head');
+                            if (r === null) {
+                                return ;
+                            }
+                            var content = xr.resource.rs_content;
+                            if (parseInt(xr.resource.content_type) == 1) {
+                                content = marked(xr.resource.rs_content);
+                            }
+                            //content = content.replace('<code>', '<pre><code>');
+                            //content = content.replace('</code>', '</code></pre>');
+
+                            var t = new Date(parseInt(xr.resource.update_time) * 1000);
+                            r.innerHTML = `
+                                <h4>${xr.resource.rs_title}</h4>
+                                <div style="border-top:solid 0.05rem #e2e2e2;">
+                                    <p style="font-size:86%;color:#a3b4c5;">
+                                        ${t.toLocaleString()}; ${xr.resource.rs_keywords}
+                                    </p>
+                                </div>
+                                
+                            `;
+                            var c = document.querySelector('#resource-main-content');
+                            if (c !== null) {
+                                c.innerHTML = `<p>${content}</p>`;
+                                hljs.highlightBlock(c);
+                            }
+                            
+                            /* 
+                            setTimeout(function() {
+                            hljs.highlightBlock(
+                                document.getElementById('main-content-block')
+                            )}, 1000); */
+                        }
+                    }
+
+                });
+            },
+
+            view : function(vnode) {
+                return m('div', {
+                    class : 'grid-x'
+                    }, [
+                        m('div', {
+                            class : 'cell medium-2 large-3'
+                        }),
+                        m('div', {
+                            class : 'cell small-12 medium-8 large-6',
+                            id : 'resource-content',
+                            style : 'padding-left:0.1rem;padding-right:0.1rem;'
+                        },[
+                            m('div', {
+                                id : 'resource-head'
+                            }),
+                            m('div', {
+                                id : 'resource-main-content'
+                            }),
+                            m('p', {
+                                id : 'resource-end-space'
+                            },' ')
+                        ]),
+                        m('div', {
+                            class : 'cell medium-2 large-3'
+                        }),
+                    ]
+                );
+            }
+        };
+
+        m.route(main, '/', {
+            '/'     : Home,
+            '/list' : List,
+            '/list/:group' : List,
+            '/resource/:rsid' : Resource
+        });
+
+    </script>
+</body>
+</html>
