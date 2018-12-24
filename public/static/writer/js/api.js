@@ -162,7 +162,7 @@ function ajax_login() {
         data    : brutal.jsontodata(data),
         success : function(xr) {
             if (xr.status == 0) {
-                document.cookie = `api_token=${xr.token}; path=/; domain=.d.com`;
+                document.cookie = `api_token=${xr.token}; path=/; domain=.w3xm.top`;
                 hide_login_block();
                 location.reload(true);
             } else {
