@@ -68,7 +68,7 @@
                 data    : brutal.jsontodata(data),
                 success : function(xr) {
                     if (xr.status == 0) {
-                        document.cookie = `api_token=${xr.token}; path=/; domain=.d.com`;
+                        document.cookie = `api_token=${xr.token}; path=/; domain=.w3xm.top`;
                         location.href = `${host}/`;
                     } else {
                         brutal.autod('#ret-tip', xr.errinfo);
