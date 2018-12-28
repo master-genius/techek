@@ -103,14 +103,21 @@
 
     function show_rs_list(rslist) {
         var html = '';
+        var linkstr = '';
         for (var i=0; i<rslist.length; i++) {
+            if (parseInt(rslist[i].content_type) == 1) {
+                linkstr = 'mdedit';
+            } else {
+                linkstr = 'edit';
+            }
+
             html += `
                 <div class="grid-x" style="margin-bottom: .2rem; margin-top: .8rem;border-bottom:solid .05rem #e2e2e2;">
                     <div class="cell small-1 medium-1 large-1">
                         <input type="checkbox" value="${rslist[i].id}" class="rs-check">
                     </div>
                     <div class="cell small-11 medium-8 large-6">
-                        <a href="/w/rs/edit/${rslist[i].id}" style="color:#4a4a4a;">
+                        <a href="/w/rs/${linkstr}/${rslist[i].id}" style="color:#4a4a4a;">
                             ${rslist[i].rs_title}
                         </a>
                     </div>
