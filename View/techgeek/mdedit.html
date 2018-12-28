@@ -147,7 +147,6 @@
         brutal.autod('#rs-title', rs.rs_title);
         brutal.autod('#rs-keywords', rs.rs_keywords);
         brutal.autod('#description', rs.description);
-        simplemde.value(rs.rs_content);
         brutal.selected('#group-list', 'set', rs.rs_group);
         if (parseInt(rs.is_publish) == 1) {
             document.getElementById('is-publish').checked = true;
@@ -192,6 +191,7 @@
                         }
                         init_group_list(xr.group_list);
                         set_rs_cache(xr.resource);
+                        simplemde.value(rs.rs_content);
                     } else {
                         show_system_info(xr.errinfo);
                     }
