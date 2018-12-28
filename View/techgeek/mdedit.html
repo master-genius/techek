@@ -166,7 +166,7 @@
         }
         
         var cache_flag  = false;
-        if (wstg_getItem('edit-init-flag')!==null) {
+        if (wstg_getItem(`edit-init-flag${rsid}`)!==null) {
             var rs = wstg_getItem('edit-rs-cache',true);
             if (rs.id == rsid) {
                 init_group_list(wstg_getItem('group-list', true));
@@ -181,7 +181,7 @@
                 args : rsid,
                 success : function (xr) {
                     if (xr.status == 0) {
-                        wstg_setItem('edit-init-flag', '1');
+                        wstg_setItem(`edit-init-flag${rsid}`, '1');
                         //wstg_setItem('edit-rsid', xr.resource.id);
                         wstg_setItem('edit-rs-cache', xr.resource, true);
                         //wstg_setItem('edit-image-list', xr.resource.image_list);
