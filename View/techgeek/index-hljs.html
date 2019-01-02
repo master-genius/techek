@@ -414,15 +414,9 @@
                             `;
                             var c = document.querySelector('#resource-main-content');
                             if (c !== null) {
-                                c.innerHTML = `<p>${content}</p>`;
+                                c.innerHTML = `${content}`;
                                 hljs.highlightBlock(c);
                             }
-                            
-                            /* 
-                            setTimeout(function() {
-                            hljs.highlightBlock(
-                                document.getElementById('main-content-block')
-                            )}, 1000); */
                         }
                     }
 
