@@ -415,7 +415,10 @@
                             var c = document.querySelector('#resource-main-content');
                             if (c !== null) {
                                 c.innerHTML = `${content}`;
-                                hljs.highlightBlock(c);
+                                var codelist = c.getElementsByTagName('code');
+                                for(var i=0; i<codelist.length; i++) {
+                                    hljs.highlightBlock(codelist[i]);
+                                }
                             }
                         }
                     }
