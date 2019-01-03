@@ -205,6 +205,10 @@
             });
         }
 
-    }
+    };
+
+    window.onunload = function() {
+        simplemde.value('');
+    };
 </script>
 <?php include (VIEW_PATH . '/techgeek/footer.html'); ?>
