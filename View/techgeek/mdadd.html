@@ -63,12 +63,6 @@
     */
     var stkey = 'add';
 
-    if (!is_edit && wstg_getItem('add-init-flag') === null) {
-        wstg_setItem('add-init-flag', '0');
-        wstg_setItem('add-rs-cache', '');
-        wstg_setItem('add-image-list', '[]');
-    }
-
     function save_cache() {
         wstg_setItem(`${stkey}-rs-cache`, form_rs_data(), true);
         wstg_setItem(`${stkey}-init-flag`, parseInt(wstg_getItem(`${stkey}-init-flag`))+1);
@@ -170,6 +164,10 @@
                 var rs = wstg_getItem('add-rs-cache',true);
                 set_rs_cache(rs);
             }
+        } else {
+            wstg_setItem('add-init-flag', '0');
+            wstg_setItem('add-rs-cache', '');
+            simplemde.value('');
         }
         
         var glist = wstg_getItem('group-list', true);
