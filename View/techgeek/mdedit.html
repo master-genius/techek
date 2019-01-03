@@ -52,11 +52,12 @@
 
     var simplemde = new SimpleMDE({
         element: document.getElementById("editor-block"),
-        autosave: {
+        /* autosave: {
             enabled: true,
             uniqueId: "content-save",
             delay: 1000,
-        },
+        }, */
+
         showIcons : [
             "code", "table"
         ],
@@ -148,6 +149,7 @@
         brutal.autod('#rs-keywords', rs.rs_keywords);
         brutal.autod('#description', rs.description);
         brutal.selected('#group-list', 'set', rs.rs_group);
+        simplemde.value(rs.rs_content);
         if (parseInt(rs.is_publish) == 1) {
             document.getElementById('is-publish').checked = true;
         } else {
@@ -205,10 +207,6 @@
             });
         }
 
-    };
-
-    window.onunload = function() {
-        simplemde.value('');
     };
 </script>
 <?php include (VIEW_PATH . '/techgeek/footer.html'); ?>
