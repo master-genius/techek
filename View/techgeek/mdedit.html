@@ -50,13 +50,23 @@
 <script src="/static/js/simplemde.min.js"></script>
 <script>
 
+    var stkey = 'edit';
+
+    var rsid = 0;
+    var pathinfo = location.pathname;
+    var path_split = pathinfo.split('/').filter(p => p.length > 0);
+    if (path_split.length > 0) {
+        rsid = path_split[path_split.length-1];
+    }
+    document.querySelector('#rs-id').value = rsid;
+
     var simplemde = new SimpleMDE({
         element: document.getElementById("editor-block"),
-        /* autosave: {
+        autosave: {
             enabled: true,
-            uniqueId: "content-save",
+            uniqueId: `content-save-${rsid}`,
             delay: 1000,
-        }, */
+        },
 
         showIcons : [
             "code", "table"
@@ -68,15 +78,6 @@
     */
     wstg_setItem('content-edit-count', '0');
 
-    var stkey = 'edit';
-
-    var rsid = 0;
-    var pathinfo = location.pathname;
-    var path_split = pathinfo.split('/').filter(p => p.length > 0);
-    if (path_split.length > 0) {
-        rsid = path_split[path_split.length-1];
-    }
-    document.querySelector('#rs-id').value = rsid;
 
     function save_cache() {
         wstg_setItem(`${stkey}-rs-cache`, form_rs_data(), true);
@@ -149,7 +150,7 @@
         brutal.autod('#rs-keywords', rs.rs_keywords);
         brutal.autod('#description', rs.description);
         brutal.selected('#group-list', 'set', rs.rs_group);
-        simplemde.value(rs.rs_content);
+        //simplemde.value(rs.rs_content);
         if (parseInt(rs.is_publish) == 1) {
             document.getElementById('is-publish').checked = true;
         } else {
