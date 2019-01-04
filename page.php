@@ -69,6 +69,11 @@ $app->group('', function() use ($app) {
         $page = $this->View->page('techgeek/index-hljs.html', $this->Config);
         return ApiRet::raw($res, $page);
     });
+    
+    $app->get('/black', function($req, $res) {
+        $page = $this->View->page('techgeek/index-hljs-black.html', $this->Config);
+        return ApiRet::raw($res, $page);
+    });
 
 });
 
