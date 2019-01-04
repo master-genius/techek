@@ -121,6 +121,30 @@
     </div>
 
     <script>
+        var sys_notice = null;
+
+        function setNotice() {
+            var nt = document.querySelector('#sys-net-notice');
+            if (nt) {
+                nt.innerHTML = '...';
+            }
+            sys_notice = setInterval(function(){
+                if (nt){
+                    if(nt.innerHTML.length > 9) {
+                        nt.innerHTML = '...';
+                    }
+                    nt.innerHTML += '.';
+                }
+            }, 80);
+        }
+
+        function clearNotice() {
+            clearInterval(sys_notice);
+            var nt = document.querySelector('#sys-net-notice');
+            if (nt) {
+                nt.innerHTML = '';
+            }
+        }
         document.querySelector('#start-win').addEventListener('click', function(e){
             //console.log(e);
             var em = document.createEvent('MouseEvent');
@@ -161,10 +185,11 @@
             if (group !== null && !isNaN(group) && parseInt(group) >= 0) {
                 args += `&group=${group}`;
             }
-
+            setNotice();
             raj.get({
                 url : `${_sysvar.apihost}/u/rs/list${args}`,
                 success : function (xr) {
+                    clearNotice();
                     if (xr.total_page > 0) {
                         ComSetPageInfo(xr.cur_page, xr.total_page);
                     }
@@ -193,31 +218,6 @@
     </script>
 
     <script>
-        var sys_notice = null;
-
-        function setNotice() {
-            var nt = document.querySelector('#sys-net-notice');
-            if (nt) {
-                nt.innerHTML = '...';
-            }
-            sys_notice = setInterval(function(){
-                if (nt){
-                    if(nt.innerHTML.length > 9) {
-                        nt.innerHTML = '...';
-                    }
-                    nt.innerHTML += '.';
-                }
-            }, 80);
-        }
-
-        function clearNotice() {
-            clearInterval(sys_notice);
-            var nt = document.querySelector('#sys-net-notice');
-            if (nt) {
-                nt.innerHTML = '';
-            }
-        }
-
         var sysbar = document.querySelector('#sys-common-bar');
 
         m.render(document.querySelector('#start-btn'), m(
