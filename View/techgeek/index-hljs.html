@@ -204,7 +204,7 @@
                     }
                     nt.innerHTML += '.';
                 }
-            }, 120);
+            }, 100);
         }
 
         function clearNotice() {
@@ -416,9 +416,11 @@
             oncreate : function(vnode) {
                 m.render(sysbar, m('span', '内容'));
                 var id = vnode.attrs.rsid;
+                setNotice();
                 raj.get({
                     url : _sysvar.apihost + '/u/rs/get/'+id,
                     success : function(xr) {
+                        clearNotice();
                         if (xr.status == 0) {
                             //m.render(sysbar, m('span', `${xr.resource.rs_title}`));
                             m.render(sysbar, m('span', {
