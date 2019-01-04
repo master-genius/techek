@@ -193,21 +193,22 @@
     </script>
 
     <script>
+        var sys_notice = null;
 
         function setNotice() {
-            setInterval(function(){
+            sys_notice = setInterval(function(){
                 var nt = document.querySelector('#sys-net-notice');
                 if (nt){
-                    if(nt.innerHTML.length > 5) {
+                    if(nt.innerHTML.length > 9) {
                         nt.innerHTML = '.';
                     }
                     nt.innerHTML += '.';
                 }
-            }, 100);
+            }, 120);
         }
 
         function clearNotice() {
-            clearInterval();
+            clearInterval(sys_notice);
             var nt = document.querySelector('#sys-net-notice');
             if (nt) {
                 nt.innerHTML = '';
