@@ -82,9 +82,13 @@
     <div class="head-menu">
         <div class="grid-x">
             <div class="cell small-3 medium-3 large-3" id="start-btn">
-                
             </div>
-            <div class="cell small-9 medium-9 large-9">
+
+            <div class="cell small-3 medium-3 large-3">
+                <span id="sys-net-notice"></span>
+            </div>
+
+            <div class="cell small-6 medium-6 large-6">
                 <span id="sys-common-bar">
                 </span>
             </div>
@@ -190,6 +194,26 @@
 
     <script>
 
+        function setNotice() {
+            setInterval(function(){
+                var nt = document.querySelector('#sys-net-notice');
+                if (nt){
+                    if(nt.innerHTML.length > 5) {
+                        nt.innerHTML = '.';
+                    }
+                    nt.innerHTML += '.';
+                }
+            }, 100);
+        }
+
+        function clearNotice() {
+            clearInterval();
+            var nt = document.querySelector('#sys-net-notice');
+            if (nt) {
+                nt.innerHTML = '';
+            }
+        }
+
         var sysbar = document.querySelector('#sys-common-bar');
 
         m.render(document.querySelector('#start-btn'), m(
@@ -244,10 +268,12 @@
 
         var Home = {
             oncreate : function(vnode) {
+                setNotice();
                 m.render(sysbar, m('span', '首页'));
                 raj.get({
                     url : _sysvar.apihost + '/u/rs/group/list',
                     success : function(xr) {
+                        clearNotice();
                         if (xr.status == 0) {
                             var html = '<div class="grid-x">';
                             for (var i=0; i<xr.group_list.length; i++) {
