@@ -196,22 +196,25 @@
         var sys_notice = null;
 
         function setNotice() {
+            var nt = document.querySelector('#sys-net-notice');
+            if (nt) {
+                nt.innerHTML = '...';
+            }
             sys_notice = setInterval(function(){
-                var nt = document.querySelector('#sys-net-notice');
                 if (nt){
                     if(nt.innerHTML.length > 9) {
-                        nt.innerHTML = '.';
+                        nt.innerHTML = '...';
                     }
                     nt.innerHTML += '.';
                 }
-            }, 100);
+            }, 80);
         }
 
         function clearNotice() {
             clearInterval(sys_notice);
             var nt = document.querySelector('#sys-net-notice');
             if (nt) {
-                //nt.innerHTML = '';
+                nt.innerHTML = '';
             }
         }
 
