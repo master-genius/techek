@@ -126,14 +126,14 @@
         function setNotice() {
             var nt = document.querySelector('#sys-net-notice');
             if (nt) {
-                nt.innerHTML = '###';
+                nt.innerHTML = 'Loading..';
             }
             sys_notice = setInterval(function(){
                 if (nt){
                     if(nt.innerHTML.length > 9) {
-                        nt.innerHTML = '###';
+                        nt.innerHTML = 'Loading..';
                     }
-                    nt.innerHTML += '#';
+                    nt.innerHTML += '.';
                 }
             }, 80);
         }
