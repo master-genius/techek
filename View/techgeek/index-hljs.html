@@ -440,15 +440,13 @@
                             if (parseInt(xr.resource.content_type) == 1) {
                                 content = marked(xr.resource.rs_content);
                             }
-                            //content = content.replace('<code>', '<pre><code>');
-                            //content = content.replace('</code>', '</code></pre>');
 
                             var t = new Date(parseInt(xr.resource.update_time) * 1000);
                             r.innerHTML = `
                                 <h4>${xr.resource.rs_title}</h4>
                                 <div style="border-top:solid 0.05rem #e2e2e2;">
                                     <p style="font-size:86%;color:#a3b4c5;">
-                                        ${t.toLocaleString()}; ${xr.resource.rs_keywords}
+                                        ${t.getFullYear() + '-' + (t.getMonth()+1) + '-' + t.getDate()}; ${xr.resource.rs_keywords}
                                     </p>
                                 </div>
                                 
