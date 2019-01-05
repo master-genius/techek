@@ -84,7 +84,7 @@
             <div class="cell small-3 medium-3 large-3" id="start-btn">
             </div>
 
-            <div class="cell small-3 medium-3 large-3">
+            <div class="cell small-3 medium-3 large-3" style="text-align: left;">
                 <span id="sys-net-notice"></span>
             </div>
 
@@ -126,14 +126,14 @@
         function setNotice() {
             var nt = document.querySelector('#sys-net-notice');
             if (nt) {
-                nt.innerHTML = '...';
+                nt.innerHTML = '###';
             }
             sys_notice = setInterval(function(){
                 if (nt){
                     if(nt.innerHTML.length > 9) {
-                        nt.innerHTML = '...';
+                        nt.innerHTML = '###';
                     }
-                    nt.innerHTML += '.';
+                    nt.innerHTML += '#';
                 }
             }, 80);
         }
