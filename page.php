@@ -66,7 +66,7 @@ $app->group('/v', function() use ($app) {
 $app->group('', function() use ($app) {
 
     $app->get('[/]', function($req, $res) {
-        $page = $this->View->page('techgeek/index-hljs.html', $this->Config);
+        $page = $this->View->page('techgeek/index-hljs2.html', $this->Config);
         return ApiRet::raw($res, $page);
     });
     
