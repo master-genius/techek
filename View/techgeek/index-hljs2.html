@@ -273,6 +273,9 @@
         var Home = {
             oncreate : function(vnode) {
                 ListPageTemp('#search-block');
+                if (wo.get('list-kwd')) {
+                    document.querySelector('#keywords').value = wo.get('list-kwd');
+                }
                 setNotice();
                 m.render(sysbar, m('span', '首页'));
                 raj.get({
@@ -362,7 +365,7 @@
 
                 
                 if (wo.get('list-kwd')) {
-                    document.querySelector('#search-kwd').value = wo.get('list-kwd');
+                    document.querySelector('#search-kwd').innerHTML = `搜索：${wo.get('list-kwd')}`;
                     //document.querySelector('#keywords').value = wo.get('list-kwd');
                 }
 
