@@ -160,7 +160,7 @@
             knode.value = '';
             wo.set('list-kwd', '');
             wo.set('list-page', 1);
-            ApiGetList();
+            //ApiGetList();
         }
 
         function ListSearch() {
@@ -365,7 +365,7 @@
 
                 
                 if (wo.get('list-kwd')) {
-                    document.querySelector('#search-kwd').innerHTML = `搜索：${wo.get('list-kwd')}`;
+                    document.querySelector('#search-kwd').innerHTML = `<h4 style="font-style:italic;">搜索：${wo.get('list-kwd')}</h4>`;
                     //document.querySelector('#keywords').value = wo.get('list-kwd');
                 }
 
