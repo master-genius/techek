@@ -7,7 +7,7 @@ function ListPageTemp (id) {
                         X
                     </a>
                 </div>
-                <input type="text" placeholder="Keywords" id="keywords" class="input-group-field">
+                <input type="text" placeholder="Keywords" id="keywords" class="input-group-field" onchange="searchKeywordChange()">
                 <div class="input-group-button">
                     <input type="submit" class="button secondary" value="Q" onclick="ListSearch();">
                 </div>

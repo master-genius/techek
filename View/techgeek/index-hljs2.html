@@ -172,6 +172,13 @@
             //ApiGetList();
         }
 
+        function searchKeywordChange() {
+            var kwd = document.querySelector('#keywords');
+            if (kwd) {
+                wo.set('list-kwd', kwd.value);
+            }
+        }
+
         function ApiGetList() {
             var page = wo.get('list-page');
             var kwd = wo.get('list-kwd');
